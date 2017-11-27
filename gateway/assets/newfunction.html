@@ -1,19 +1,36 @@
 <md-dialog aria-label="List dialog" layout="column" flex="70">
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <h2>Deploy A New Function</h2>
+            <h2 ng-show="funcStoreVisible">
+                <span>Select from Function Store</span>
+            </h2>
+            <h2 ng-hide="funcStoreVisible">
+                Deploy A New Function
+                <md-button class="md-icon-button" ng-click="showFuncStore()">
+                <md-icon md-svg-src="img/icons/ic_library_books_white_24px.svg" aria-label="Function Store"></md-icon>
+            </h2>
             <span flex></span>
+            <span ng-if="!funcStoreVisible">
             <md-button class="md-icon-button" ng-click="closeDialog()">
             <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </span>
+            <span ng-if="funcStoreVisible">
+            <md-button class="md-icon-button" ng-click="closeFuncStore()">
+            <md-icon md-svg-src="img/icons/ic_arrow_back_white.svg" aria-label="Function Store"></md-icon>
+            </span>
             </md-button>
         </div>
     </md-toolbar>
 
-    <md-dialog-content class="md-padding">
-        <label><i>Use this form to test a function or the <a ng-href="https://github.com/openfaas/faas-cli">faas-cli</a> for more options.</i></label>
+    <md-dialog-content ng-show="funcStoreVisible" class="md-padding">
+        <label>Select a function from below:</label>
+        <func-store on-selected="onFuncSelected"></func-store>
     </md-dialog-content>
 
-    <md-dialog-content class="md-padding">
+    <md-dialog-content ng-hide="funcStoreVisible" class="md-padding">
+        <div>
+            <label><i>Use this form to test a function or the <a ng-href="https://github.com/openfaas/faas-cli">faas-cli</a> for more options.</i></label>
+        </div>
         <label>Define the function below:</label>
         <form name="userForm">
             <div layout-gt-xs="row">
@@ -51,10 +68,13 @@
     </md-dialog-content>
 
     <md-dialog-actions>
-        <md-button ng-click="closeDialog()" class="md-secondary">
+        <md-button ng-show="funcStoreVisible" ng-click="closeFuncStore()" class="md-secondary">
+            Go Back
+        </md-button>
+        <md-button ng-hide="funcStoreVisible" ng-click="closeDialog()" class="md-secondary">
             Close Dialog
         </md-button>
-        <md-button ng-click="createFunc()" class="md-primary">
+        <md-button ng-hide="funcStoreVisible" ng-click="createFunc()" class="md-primary">
             Deploy
         </md-button>
     </md-dialog-actions>

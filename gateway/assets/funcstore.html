@@ -1,0 +1,10 @@
+<md-list>
+    <md-list-item ng-repeat="func in $ctrl.functions" ng-click="$ctrl.select(func, $event)" class="noright">
+        <img ng-if="func.icon" ng-src="{{ func.icon }}" class="md-avatar" style="border-radius: 0" />
+        <img ng-if="!func.icon" src="https://avatars0.githubusercontent.com/u/27013154" class="md-avatar" style="border-radius: 0"/>
+        <p>{{ func.title }}</p>
+        <md-icon md-svg-icon="communication:email" ng-click="doSecondaryAction($event)" aria-label="Send Email" class="md-secondary md-hue-3"></md-icon>
+        <md-icon class="md-secondary" ng-click="doSecondaryAction($event)" aria-label="Chat" md-svg-icon="communication:message"></md-icon>
+        <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+</md-list>

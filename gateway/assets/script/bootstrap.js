@@ -2,7 +2,7 @@
 // Copyright (c) Alex Ellis 2017. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-var app = angular.module('faasGateway', ['ngMaterial']);
+var app = angular.module('faasGateway', ['ngMaterial', 'faasGateway.funcStore']);
 
 app.controller("home", ['$scope', '$log', '$http', '$location', '$timeout', '$mdDialog', '$mdToast', '$mdSidenav',
     function($scope, $log, $http, $location, $timeout, $mdDialog, $mdToast, $mdSidenav) {
@@ -137,10 +137,25 @@ app.controller("home", ['$scope', '$log', '$http', '$location', '$timeout', '$md
         };
 
         var DialogController = function($scope, $mdDialog, item) {
+            $scope.funcStoreVisible = false;
+            $scope.showFuncStore = function() {
+                $scope.funcStoreVisible = true;
+            };
+            $scope.closeFuncStore = function() {
+                $scope.funcStoreVisible = false;
+            };
             $scope.item = item;
             $scope.closeDialog = function() {
                 $mdDialog.hide();
             };
+
+            $scope.onFuncSelected = function(func) {
+                $scope.item.image = func.image;
+                $scope.item.service = func.name;
+                $scope.item.envProcess = func.fprocess;
+                $scope.item.network = func.network;
+                $scope.funcStoreVisible = false;
+            }
 
             $scope.createFunc = function() {
                 var options = {

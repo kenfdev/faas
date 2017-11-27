@@ -143,7 +143,10 @@ func main() {
 	}
 
 	fs := http.FileServer(http.Dir("./assets/"))
-	r.PathPrefix("/ui/").Handler(http.StripPrefix("/ui", fs)).Methods("GET")
+
+	allowedHost := "raw.githubusercontent.com"
+	fsCORS := decorateWithCORS(fs, allowedHost)
+	r.PathPrefix("/ui/").Handler(http.StripPrefix("/ui", fsCORS)).Methods("GET")
 
 	r.HandleFunc("/", faasHandlers.RoutelessProxy).Methods("POST")
 
@@ -162,4 +165,27 @@ func main() {
 	}
 
 	log.Fatal(s.ListenAndServe())
+}
+
+type corsHandler struct {
+	Upstream    *http.Handler
+	AllowedHost string
+}
+
+func (c corsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	// i.e. allow Git Raw
+	// https://raw.githubusercontent.com/kenfdev/sample-func-store/master/store.json
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "GET")
+	w.Header().Set("Access-Control-Allow-Origin", c.AllowedHost)
+
+	(*c.Upstream).ServeHTTP(w, r)
+}
+
+func decorateWithCORS(upstream http.Handler, allowedHost string) http.Handler {
+	return corsHandler{
+		Upstream:    &upstream,
+		AllowedHost: allowedHost,
+	}
 }
