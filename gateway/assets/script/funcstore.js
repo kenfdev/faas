@@ -14,15 +14,18 @@ funcStoreModule.service('FuncStoreService', ['$http', function ($http) {
 funcStoreModule.component('funcStore', {
     templateUrl: 'funcstore.html',
     bindings: {
+        selectedFunc: '<',
         onSelected: '&',
     },
     controller: ['FuncStoreService', '$mdDialog', function FuncStoreController(FuncStoreService, $mdDialog) {
         var self = this;
 
         this.storeUrl = 'https://raw.githubusercontent.com/kenfdev/sample-func-store/master/store.json';
+        this.selectedFunc = null;
         this.functions = [];
 
         this.select = function (func, event) {
+            self.selectedFunc = func;
             self.onSelected()(func, event);
         };
 

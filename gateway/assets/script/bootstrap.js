@@ -137,14 +137,8 @@ app.controller("home", ['$scope', '$log', '$http', '$location', '$timeout', '$md
         };
 
         var DialogController = function($scope, $mdDialog, item) {
-            $scope.funcStoreVisible = false;
-            $scope.showFuncStore = function() {
-                $scope.funcStoreVisible = true;
-            };
-            $scope.closeFuncStore = function() {
-                $scope.funcStoreVisible = false;
-            };
             $scope.item = item;
+            $scope.selectedFunc = null;
             $scope.closeDialog = function() {
                 $mdDialog.hide();
             };
@@ -154,7 +148,15 @@ app.controller("home", ['$scope', '$log', '$http', '$location', '$timeout', '$md
                 $scope.item.service = func.name;
                 $scope.item.envProcess = func.fprocess;
                 $scope.item.network = func.network;
-                $scope.funcStoreVisible = false;
+                $scope.selectedFunc = func;
+            }
+
+            $scope.onStoreTabDeselect = function() {
+                $scope.selectedFunc = null;
+            }
+
+            $scope.onManualTabDeselect = function() {
+                $scope.item = {};
             }
 
             $scope.createFunc = function() {
