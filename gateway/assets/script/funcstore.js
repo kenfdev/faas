@@ -16,20 +16,40 @@ funcStoreModule.component('funcStore', {
     bindings: {
         onSelected: '&',
     },
-    controller: ['FuncStoreService', function FuncStoreController(FuncStoreService) {
+    controller: ['FuncStoreService', '$mdDialog', function FuncStoreController(FuncStoreService, $mdDialog) {
         var self = this;
 
+        this.storeUrl = 'https://raw.githubusercontent.com/kenfdev/sample-func-store/master/store.json';
         this.functions = [];
+
         this.select = function (func, event) {
             self.onSelected()(func, event);
+        };
+
+        this.loadStore = function () {
+            self.loading = true;
+            FuncStoreService.fetchStore(self.storeUrl)
+                .then(function (data) {
+                    self.loading = false;
+                    self.functions = data;
+                });
         }
 
-        var url = 'https://raw.githubusercontent.com/kenfdev/sample-func-store/master/store.json';
+        this.showInfo = function (func, event) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                .multiple(true)
+                .parent(angular.element(document.querySelector('#newfunction-dialog')))
+                .clickOutsideToClose(true)
+                .title(func.title)
+                .textContent(func.description)
+                .ariaLabel(func.title)
+                .ok('OK')
+                .targetEvent(event)
+            );
+        }
 
-        FuncStoreService.fetchStore(url)
-            .then(function (data) {
-                self.functions = data;
-            });
+        this.loadStore();
 
     }]
 });
