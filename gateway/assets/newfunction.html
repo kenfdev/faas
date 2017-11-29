@@ -10,13 +10,13 @@
     </md-toolbar>
 
     <md-dialog-content class="md-padding">
-            <md-tabs md-dynamic-height md-border-bottom>
-              <md-tab label="From Store" md-on-deselect="onStoreTabDeselect()">
+            <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTabIdx">
+              <md-tab label="From Store" md-on-deselect="onStoreTabDeselect()" md-on-select="onTabSelect(0)">
                 <md-content class="md-padding">
                   <func-store selected-func="selectedFunc" on-selected="onFuncSelected"></func-store>
                 </md-content>
               </md-tab>
-              <md-tab label="Manually" md-on-deselect="onManualTabDeselect()">
+              <md-tab label="Manually" md-on-deselect="onManualTabDeselect()" md-on-select="onTabSelect(1)">
                 <md-content class="md-padding">
                     <div>
                         <label><i>Use this form to test a function or the <a ng-href="https://github.com/openfaas/faas-cli">faas-cli</a> for more options.</i></label>

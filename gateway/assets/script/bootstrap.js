@@ -6,6 +6,7 @@ var app = angular.module('faasGateway', ['ngMaterial', 'faasGateway.funcStore'])
 
 app.controller("home", ['$scope', '$log', '$http', '$location', '$timeout', '$mdDialog', '$mdToast', '$mdSidenav',
     function($scope, $log, $http, $location, $timeout, $mdDialog, $mdToast, $mdSidenav) {
+        var newFuncTabIdx = 0;
         $scope.functions = [];
         $scope.invocationInProgress = false;
         $scope.invocationRequest = "";
@@ -137,6 +138,7 @@ app.controller("home", ['$scope', '$log', '$http', '$location', '$timeout', '$md
         };
 
         var DialogController = function($scope, $mdDialog, item) {
+            $scope.selectedTabIdx = newFuncTabIdx;
             $scope.item = item;
             $scope.selectedFunc = null;
             $scope.closeDialog = function() {
@@ -149,6 +151,10 @@ app.controller("home", ['$scope', '$log', '$http', '$location', '$timeout', '$md
                 $scope.item.envProcess = func.fprocess;
                 $scope.item.network = func.network;
                 $scope.selectedFunc = func;
+            }
+            
+            $scope.onTabSelect = function(idx) {
+                newFuncTabIdx = idx;
             }
 
             $scope.onStoreTabDeselect = function() {
