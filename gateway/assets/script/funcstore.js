@@ -20,9 +20,10 @@ funcStoreModule.component('funcStore', {
     controller: ['FuncStoreService', '$mdDialog', function FuncStoreController(FuncStoreService, $mdDialog) {
         var self = this;
 
-        this.storeUrl = 'https://raw.githubusercontent.com/kenfdev/sample-func-store/master/store.json';
+        this.storeUrl = 'https://raw.githubusercontent.com/openfaas/store/master/store.json';
         this.selectedFunc = null;
         this.functions = [];
+        this.message = '';
 
         this.select = function (func, event) {
             self.selectedFunc = func;
@@ -31,10 +32,17 @@ funcStoreModule.component('funcStore', {
 
         this.loadStore = function () {
             self.loading = true;
+            self.functions = [];
+            self.message = '';
             FuncStoreService.fetchStore(self.storeUrl)
                 .then(function (data) {
                     self.loading = false;
                     self.functions = data;
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    self.loading = false;
+                    self.message = 'Unable to reach GitHub.com';
                 });
         }
 
