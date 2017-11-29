@@ -24,6 +24,16 @@ funcStoreModule.component('funcStore', {
         this.selectedFunc = null;
         this.functions = [];
         this.message = '';
+        this.searchText = '';
+
+        this.search = function (func) {
+            // filter with title and description
+            if (!self.searchText || (func.title.toLowerCase().indexOf(self.searchText.toLowerCase()) != -1) ||
+                (func.description.toLowerCase().indexOf(self.searchText.toLowerCase()) != -1)) {
+                return true;
+            }
+            return false;
+        }
 
         this.select = function (func, event) {
             self.selectedFunc = func;
